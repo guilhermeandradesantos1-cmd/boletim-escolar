@@ -1,0 +1,71 @@
+import inquirer
+from colorama import Fore,Back, Style, init
+init()
+print(Fore.GREEN+"BEM VINDO AO BOLETIM ESCOLAR")
+print('~' * 30)
+
+alunos = {}
+
+while True:
+    escolha = inquirer.prompt([inquirer.List(
+    "ESCOLHA_UMA_AÇÃO",
+    message="ESCOLHA UMA AÇÃO",
+    choices=["ADICIONAR ALUNO","REMOVER ALUNO","ADICIONAR NOTA","REMOVER NOTA","VER BOLETIM", "SAIR"],
+    )])["ESCOLHA_UMA_AÇÃO"]
+
+    if escolha == "ADICIONAR ALUNO":
+        nome = input("Digite o nome do novo aluno: ").title()
+        if nome not in alunos:
+            alunos[nome] = []  
+            print(f"Aluno {nome} cadastrado com sucesso!")
+        else:
+            print("Esse aluno já existe.")
+
+    elif escolha == "REMOVER ALUNO":
+        nome = input("Digite o nome do aluno a remover: ").title()
+        if nome in alunos:
+            del alunos[nome]
+            print(f"Aluno {nome} removido com sucesso!")
+        else:
+            print("Aluno não encontrado.")
+
+    elif escolha == "ADICIONAR NOTA":
+        nome = input("Digite o nome do aluno: ").title()
+        if nome in alunos:
+            nota = float(input("Digite a nota: "))
+            alunos[nome].append(nota)
+            print("Nota adicionada com sucesso!")
+        else:
+            print("Aluno não encontrado.")
+
+    elif escolha == "REMOVER NOTA":
+        nome = input("Digite o nome do aluno: ").title()
+        if nome in alunos and alunos[nome]:
+            print("Notas atuais:", alunos[nome])
+            indice = int(input("Digite o índice da nota para remover (começa no 0): "))
+            if 0 <= indice < len(alunos[nome]):
+                removida = alunos[nome].pop(indice)
+                print(f"Nota {removida} removida com sucesso!")
+            else:
+                print("Índice inválido.")
+        else:
+            print("Aluno não encontrado ou sem notas.")
+
+    elif escolha == "VER BOLETIM":
+        if alunos:
+            print("\n=== BOLETIM ESCOLAR ===")
+            for nome, notas in alunos.items():
+                if notas:
+                    media = sum(notas) / len(notas)
+                    print(f"{nome} -> Notas: {notas} | Média: {media:.2f}")
+                else:
+                    print(f"{nome} -> Nenhuma nota cadastrada.")
+        else:
+            print("Nenhum aluno cadastrado.")
+
+    elif escolha == "SAIR":
+        print("Saindo do sistema... Até logo!")
+        break
+
+else:
+    print("Opção inválida. Tente novamente.")
